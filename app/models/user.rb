@@ -1,2 +1,4 @@
 class User < ApplicationRecord
-end
+    has_many :diets
+    has_many :foods, through: :diets
+  end
