@@ -12,9 +12,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :users do
-        resources :foods
-      end
+      resources :users
+      resources :foods
       resources :diets
     end
   end

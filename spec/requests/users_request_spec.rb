@@ -44,7 +44,60 @@ RSpec.describe "Users", type: :request do
         expect(response).to be_successful
         users = JSON.parse(response.body, symbolize_names: true)
 
-        expect(users[:data]).to have_length(2)
+        expect(users[:data]).to be_an(Array)
+
+        users[:data].each do |user|
+          expect(user).to have_key(:id)
+          expect(user[:id]).to be_a(String)
+
+          expect(user).to have_key(:type)
+          expect(user[:type]).to eq("user")
+
+          attributes = user[:attributes]
+
+          expect(attributes).to have_key(:first_name)
+          expect(attributes[:first_name]).to be_a(String)
+          
+          expect(attributes).to have_key(:last_name)
+          expect(attributes[:last_name]).to be_a(String)
+          
+          expect(attributes).to have_key(:email)
+          expect(attributes[:email]).to be_a(String)
+          
+          expect(attributes).to have_key(:password)
+          expect(attributes[:password]).to be_a(String)
+          
+          expect(attributes).to have_key(:sex)
+          expect(attributes[:sex]).to be_a(String).or be_nil
+          
+          expect(attributes).to have_key(:weight_lbs)
+          expect(attributes[:weight_lbs]).to be_a(Float).or be_nil
+          
+          expect(attributes).to have_key(:height_ft)
+          expect(attributes[:height_ft]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:height_in)
+          expect(attributes[:height_in]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:age)
+          expect(attributes[:age]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:activity_level)
+          expect(attributes[:activity_level]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:target_calories)
+          expect(attributes[:target_calories]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:target_fats)
+          expect(attributes[:target_fats]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:target_carbs)
+          expect(attributes[:target_carbs]).to be_a(Integer).or be_nil
+          
+          expect(attributes).to have_key(:target_protein)
+          expect(attributes[:target_protein]).to be_a(Integer).or be_nil
+          
+        end
       end
     end
 
