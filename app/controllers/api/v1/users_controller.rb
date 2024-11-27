@@ -23,7 +23,13 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update 
-
+    user = User.find_by(id: params[:id].to_i)
+    if user.nil?
+      #RENDER ERROR
+    else
+      user.update!(user_params)
+      render json: UserSerializer.new(user)
+    end
   end
 
   def delete
@@ -33,6 +39,6 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:first_name, :last_name, :email, :password)
+    params.permit(:first_name, :last_name, :email, :password, :sex, :weight_lbs, :height_ft, :height_in, :age, :activity_level, :target_calories, :target_fats, :target_carbs, :target_protein)
   end
 end

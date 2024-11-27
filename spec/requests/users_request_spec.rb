@@ -155,16 +155,42 @@ RSpec.describe "Users", type: :request do
 
         patch "/api/v1/users/#{test_user_id}", params: new_params
 
-        updated_user = User.find(test_user_id)
+        updated_user = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to be_successful
         
-        expect(updated_user.first_name).to_not eq(old_first_name)
-        expect(updated_user.first_name).to eq("NEW FIRST NAME")
+        expect(updated_user[:data][:attributes][:first_name]).to_not eq(old_first_name)
+        expect(updated_user[:data][:attributes][:first_name]).to eq("NEW FIRST NAME")
       end
 
       it "correctly calls the calculateNutritionNeeds() to updated nutrition attributes" do
+        test_user = User.create!(
+          first_name: "Test",
+          last_name: "User",
+          email: "FakeUser@gmail.com",
+          password: "password",
+          sex: "male",
+          weight_lbs: 165,
+          height_ft: 5,
+          height_in: 10,
+          age: 25,
+          activity_level: 0
+        )
+        test_user_id = test_user.id
 
+        expect(test_user.target_calories).to eq(nil)
+        expect(test_user.target_fats).to eq(nil)
+        expect(test_user.target_carbs).to eq(nil)
+        expect(test_user.target_protein).to eq(nil)
+        patch "/api/v1/users/#{test_user_id}/calculate_nutrition_needs"
+
+        updated_user = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to be_successful
+        expect(updated_user[:data][:attributes][:target_calories]).to eq(2088)
+        expect(updated_user[:data][:attributes][:target_fats]).to eq(59)
+        expect(updated_user[:data][:attributes][:target_carbs]).to eq(278)
+        expect(updated_user[:data][:attributes][:target_protein]).to eq(127)
       end
     end
 
