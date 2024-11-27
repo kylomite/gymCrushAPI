@@ -13,9 +13,6 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :users do
-        member do
-          patch :calculate_nutrition_needs
-        end
         resources :foods
         resources :diets
       end

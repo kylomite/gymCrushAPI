@@ -182,15 +182,16 @@ RSpec.describe "Users", type: :request do
         expect(test_user.target_fats).to eq(nil)
         expect(test_user.target_carbs).to eq(nil)
         expect(test_user.target_protein).to eq(nil)
-        patch "/api/v1/users/#{test_user_id}/calculate_nutrition_needs"
+
+        patch "/api/v1/users/#{test_user_id}", params: { calculate_nutrition_needs: "true" }
 
         updated_user = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to be_successful
-        expect(updated_user[:data][:attributes][:target_calories]).to eq(2088)
-        expect(updated_user[:data][:attributes][:target_fats]).to eq(59)
-        expect(updated_user[:data][:attributes][:target_carbs]).to eq(278)
-        expect(updated_user[:data][:attributes][:target_protein]).to eq(127)
+        expect(updated_user[:data][:attributes][:target_calories]).to eq(2179)
+        expect(updated_user[:data][:attributes][:target_carbs]).to eq(272)
+        expect(updated_user[:data][:attributes][:target_fats]).to eq(48)
+        expect(updated_user[:data][:attributes][:target_protein]).to eq(108)
       end
     end
 

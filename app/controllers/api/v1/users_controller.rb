@@ -26,9 +26,12 @@ class Api::V1::UsersController < ApplicationController
     user = User.find_by(id: params[:id].to_i)
     if user.nil?
       #RENDER ERROR
+    elsif params[:calculate_nutrition_needs] == "true"
+      user.calculateNutritionNeeds
+      render json: UserSerializer.new(user), status: :ok
     else
       user.update!(user_params)
-      render json: UserSerializer.new(user)
+      render json: UserSerializer.new(user), status: :ok
     end
   end
 
