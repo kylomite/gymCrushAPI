@@ -7,16 +7,6 @@ RSpec.describe "Users", type: :request do
       last_name: "Doe",
       email: "john.doe@example.com",
       password: "password123"
-    #   sex: "male",
-    #   weight_lbs: 180.5,
-    #   height_ft: 5,
-    #   height_in: 10,
-    #   age: 30,
-    #   activity_level: 3, 
-    #   target_calories: 2500,
-    #   target_fats: 70,
-    #   target_carbs: 300,
-    #   target_protein: 150
     )
 
     @user2 = User.create!(
@@ -38,13 +28,13 @@ RSpec.describe "Users", type: :request do
   end
   describe "GET all users" do
     describe "HAPPY path" do
-      it "returns an array of all users with attributes" do
+      it "returns a hash of all users with attributes" do
         get "/api/v1/users"
 
         expect(response).to be_successful
         users = JSON.parse(response.body, symbolize_names: true)
 
-        expect(users[:data]).to be_an(Array)
+        expect(users).to be_a(Hash)
 
         users[:data].each do |user|
           expect(user).to have_key(:id)
@@ -108,7 +98,12 @@ RSpec.describe "Users", type: :request do
 
   describe "GET single users" do
     describe "HAPPY path" do
+      get "/api/v1/users/#{@user1.id}"
 
+      expect(response).to be_successful
+      user = JSON.parse(response.body, symbolize_names: true)
+
+      expect(user[:data][:attributes][:first_name]).to eq(@user1.id)
     end
 
     describe "SAD path" do
