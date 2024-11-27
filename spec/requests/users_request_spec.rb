@@ -98,12 +98,16 @@ RSpec.describe "Users", type: :request do
 
   describe "GET single users" do
     describe "HAPPY path" do
-      get "/api/v1/users/#{@user1.id}"
+      it "returns an object containing one instance of specified user" do
+        get "/api/v1/users/#{@user1.id}"
 
-      expect(response).to be_successful
-      user = JSON.parse(response.body, symbolize_names: true)
+        expect(response).to be_successful
+        user = JSON.parse(response.body, symbolize_names: true)
 
-      expect(user[:data][:attributes][:first_name]).to eq(@user1.id)
+        expect(user).to be_a(Hash)
+
+        expect(user[:data][:attributes][:first_name]).to eq(@user1.first_name)
+      end
     end
 
     describe "SAD path" do
