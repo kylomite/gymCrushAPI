@@ -142,7 +142,25 @@ RSpec.describe "Users", type: :request do
   describe "PATCH single users" do
     describe "HAPPY path" do
       it "updates the attributes of the specified user" do
+        test_user = User.create!(
+          first_name: "Test",
+          last_name: "User",
+          email: "FakeUser@gmail.com",
+          password: "qwertyuiop"
+        )
+        test_user_id = test_user.id
+        old_first_name = test_user.first_name
 
+        new_params = { first_name: "NEW FIRST NAME"}
+
+        patch "/api/v1/users/#{test_user_id}", params: new_params
+
+        updated_user = User.find(test_user_id)
+
+        expect(response).to be_successful
+        
+        expect(updated_user.first_name).to_not eq(old_first_name)
+        expect(updated_user.first_name).to eq("NEW FIRST NAME")
       end
 
       it "correctly calls the calculateNutritionNeeds() to updated nutrition attributes" do
