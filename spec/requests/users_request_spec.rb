@@ -115,9 +115,39 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "CREATE single users" do
+    describe "HAPPY path" do
+      it "creates a new instance of a user" do
+        user_params = {
+          first_name: "Test",
+          last_name: "User",
+          email: "FakeUser@gmail.com",
+          password: "qwertyuiop"
+        }
+
+        post "/api/v1/users", params: user_params
+
+        new_user = JSON.parse(response.body, symbolize_names: true)
+
+        expect(new_user[:data][:attributes][:first_name]).to eq("Test")
+        expect(new_user[:data][:attributes][:last_name]).to eq("User")
+      end
+    end
+
+    describe "SAD path" do
+      
+    end
+  end
+
   describe "PATCH single users" do
     describe "HAPPY path" do
+      it "updates the attributes of the specified user" do
 
+      end
+
+      it "correctly calls the calculateNutritionNeeds() to updated nutrition attributes" do
+
+      end
     end
 
     describe "SAD path" do
