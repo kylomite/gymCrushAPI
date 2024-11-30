@@ -35,8 +35,8 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def delete
-
+  def destroy
+    render json: User.destroy(params[:id]), status: 204
   end
 
   private

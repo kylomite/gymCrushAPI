@@ -202,7 +202,21 @@ RSpec.describe "Users", type: :request do
 
   describe "DELETE single users" do
     describe "HAPPY path" do
+      it "destroys users based on the specified id" do
+        test_user = User.create!(
+          first_name: "Test",
+          last_name: "User",
+          email: "FakeUser@gmail.com",
+          password: "password"
+        )
+        binding.pry
+        expect(User.count).to eq(3)
+        delete "/api/v1/users/#{test_user.id}"
 
+        expect(response).to be_successful
+
+        expect(User.count).to eq(2)
+      end
     end
 
     describe "SAD path" do
