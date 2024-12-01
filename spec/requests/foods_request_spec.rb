@@ -134,6 +134,44 @@ RSpec.describe "Foods", type: :request do
 
         expect(@user.foods.count).to eq(2)
       end
+      it "only destroys the specific instance of a food from a users" do
+        food3 = Food.create!(
+          title: "Broccoli",
+          image: "https://www.foodimagedb.com/food-images/262ee4f2-13df-4a62-ad07-75f993adc04e_1024x1024.png",
+          serving_size: "1 cup chopped",
+          calories: 31,
+          fats: 0.34,
+          carbs: 6.04,
+          protein: 2.57
+        )
+
+        food4 = Food.create!(
+          title: "Broccoli",
+          image: "https://www.foodimagedb.com/food-images/262ee4f2-13df-4a62-ad07-75f993adc04e_1024x1024.png",
+          serving_size: "1 cup chopped",
+          calories: 31,
+          fats: 0.34,
+          carbs: 6.04,
+          protein: 2.57
+        )
+
+        Diet.create!(
+          user_id: @user.id,
+          food_id: food3.id
+        )
+
+        Diet.create!(
+          user_id: @user.id,
+          food_id: food4.id
+        )
+
+        expect(@user.foods.count).to eq(4)
+        delete "/api/v1/users/#{@user.id}/foods/#{food3.id}"
+
+        expect(response).to be_successful
+
+        expect(@user.foods.count).to eq(3)
+      end
     end
 
     describe "SAD path" do
