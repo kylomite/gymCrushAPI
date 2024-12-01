@@ -1,16 +1,19 @@
 class Api::V1::Users::FoodsController < ApplicationController
-    def index
-        user = User.find(params[:user_id].to_i)
-        foods = user.foods
+  def index
+    user = User.find(params[:user_id].to_i)
+    foods = user.foods
 
-        render json: FoodSerializer.new(foods)
-    end
+    render json: FoodSerializer.new(foods)
+  end
 
-    def show
+  def show
+    user = User.find(params[:user_id].to_i)
+    food = Food.find(params[:id].to_i)
 
-    end
+    render json: FoodSerializer.new(food)
+  end
 
-    def destroy
+  def destroy
 
-    end
+  end
 end

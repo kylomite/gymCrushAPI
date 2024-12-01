@@ -88,7 +88,7 @@ RSpec.describe "Foods", type: :request do
         expect(response).to be_successful
         food = JSON.parse(response.body, symbolize_names:true)[:data]
 
-        expect(food[:id]).to eq(@food1[:id])
+        expect(food[:id].to_i).to eq(@food1.id)
         expect(food[:type]).to eq("food")
         
         attributes = food[:attributes]
