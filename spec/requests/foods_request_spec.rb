@@ -142,7 +142,7 @@ RSpec.describe "Foods", type: :request do
         expect(attributes[:protein]).to eq(food_params[:protein])
 
         food = Food.find(new_food[:data][:id])
-        expect(food.user_id).to eq(@user.id)
+        expect(food.users).to include(@user)
       end
     end
 
@@ -176,6 +176,7 @@ RSpec.describe "Foods", type: :request do
 
         expect(@user.foods.count).to eq(2)
       end
+
       it "only destroys the specific instance of a food from a users" do
         food3 = Food.create!(
           title: "Broccoli",
