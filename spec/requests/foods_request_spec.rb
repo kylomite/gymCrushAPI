@@ -109,6 +109,48 @@ RSpec.describe "Foods", type: :request do
     end
   end
 
+  describe "CREATE single food" do
+    describe "HAPPY path" do
+      it "creates a new instance of a food with a corresponding diet for the specified user" do
+        food_params = {
+          title: "Broccoli",
+          image: "https://www.foodimagedb.com/food-images/262ee4f2-13df-4a62-ad07-75f993adc04e_1024x1024.png",
+          serving_size: "1 cup chopped",
+          calories: 31,
+          fats: 0.34,
+          carbs: 6.04,
+          protein: 2.57
+        }
+
+        post "/api/v1/users/#{@user.id}/foods", params: food_params
+        
+        expect(response).to be_successful
+
+        new_food = JSON.parse(response.body, symbolize_names:true)
+
+        expect(new_food[:data][:id].to_i).to eq(Food.last.id)
+        expect(new_food[:data][:type]).to eq("food")
+        
+        attributes = new_food[:data][:attributes]
+
+        expect(attributes[:title]).to eq(food_params[:title])
+        expect(attributes[:image]).to eq(food_params[:image])
+        expect(attributes[:serving_size]).to eq(food_params[:serving_size])
+        expect(attributes[:calories]).to eq(food_params[:calories])
+        expect(attributes[:fats]).to eq(food_params[:fats])
+        expect(attributes[:carbs]).to eq(food_params[:carbs])
+        expect(attributes[:protein]).to eq(food_params[:protein])
+
+        food = Food.find(new_food[:data][:id])
+        expect(food.user_id).to eq(@user.id)
+      end
+    end
+
+    describe "SAD path" do
+
+    end
+  end
+
   describe "DELETE single food" do
     describe "HAPPY path" do
       it "destroys food based on the specified id" do
