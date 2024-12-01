@@ -56,7 +56,23 @@ RSpec.describe "Foods", type: :request do
 
         expect(response).to be_successful
         foods = JSON.parse(response.body, symbolize_names: true)
-        binding.pry
+
+        expect(foods).to be_a(Hash)
+
+        foods[:data].each do |food|
+          expect(food).to have_key(:id)
+          expect(food[:type]).to eq("food")
+
+          attributes = food[:attributes]
+          
+          expect(attributes[:title]).to be_a(String)
+          expect(attributes[:image]).to be_a(String)
+          expect(attributes[:serving_size]).to be_a(String)
+          expect(attributes[:calories]).to be_a(Integer)
+          expect(attributes[:fats]).to be_a(Float)
+          expect(attributes[:carbs]).to be_a(Float)
+          expect(attributes[:protein]).to be_a(Float)
+        end
       end
     end
 
