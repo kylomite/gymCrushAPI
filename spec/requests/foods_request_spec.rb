@@ -48,7 +48,7 @@ RSpec.describe "Foods", type: :request do
       food_id: @food2.id
     )
   end
-  describe "GET /index" do
+  describe "GET all foods" do
     describe "HAPPY path" do
       it "returns a list of all foods assigned to a user" do
 
@@ -73,6 +73,34 @@ RSpec.describe "Foods", type: :request do
           expect(attributes[:carbs]).to be_a(Float)
           expect(attributes[:protein]).to be_a(Float)
         end
+      end
+    end
+
+    describe "SAD path" do
+      
+    end
+  end
+  describe "GET single food" do
+    describe "HAPPY path" do
+      it "returns an object containing one instance of a specified food" do
+        get "/api/v1/users/#{@user.id}/foods/#{@food1.id}"
+
+        expect(response).to be_successful
+        food = JSON.parse(response.body, symbolize_names:true)[:data]
+
+        expect(food[:id]).to eq(@food1[:id])
+        expect(food[:type]).to eq("food")
+        
+        attributes = food[:attributes]
+
+        expect(attributes[:title]).to eq(@food1.title)
+        expect(attributes[:image]).to eq(@food1.image)
+        expect(attributes[:serving_size]).to eq(@food1.serving_size)
+        expect(attributes[:calories]).to eq(@food1.calories)
+        expect(attributes[:fats]).to eq(@food1.fats)
+        expect(attributes[:carbs]).to eq(@food1.carbs)
+        expect(attributes[:protein]).to eq(@food1.protein)
+
       end
     end
 
