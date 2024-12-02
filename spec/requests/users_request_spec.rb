@@ -54,8 +54,6 @@ RSpec.describe "Users", type: :request do
           expect(attributes).to have_key(:email)
           expect(attributes[:email]).to be_a(String)
           
-          expect(attributes).to have_key(:password)
-          expect(attributes[:password]).to be_a(String)
           
           expect(attributes).to have_key(:sex)
           expect(attributes[:sex]).to be_a(String).or be_nil
@@ -139,6 +137,43 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "Login()" do
+    describe "HAPPY path" do
+      it "returns a user instances when based on email and password matching given user" do
+        login_params =  {
+          email: "kyle.lastname@example.com",
+          password: "password"
+        }
+        post "/api/v1/users/login", params: login_params
+
+        expect(response).to be_successful
+
+        user = JSON.parse(response.body, symbolize_names: true)
+
+        user_data = user[:data][:attributes]
+        expect(user_data[:first_name]).to eq(@user2.first_name)
+        expect(user_data[:last_name]).to eq(@user2.last_name)
+        expect(user_data[:email]).to eq(@user2.email)
+        expect(user_data[:sex]).to eq(@user2.sex)
+        expect(user_data[:weight_lbs]).to eq(@user2.weight_lbs)
+        expect(user_data[:height_ft]).to eq(@user2.height_ft)
+        expect(user_data[:height_in]).to eq(@user2.height_in)
+        expect(user_data[:age]).to eq(@user2.age)
+        expect(user_data[:activity_level]).to eq(@user2.activity_level)
+        expect(user_data[:target_calories]).to eq(@user2.target_calories)
+        expect(user_data[:target_fats]).to eq(@user2.target_fats)
+        expect(user_data[:target_carbs]).to eq(@user2.target_carbs)
+        expect(user_data[:target_protein]).to eq(@user2.target_protein)
+      end
+    end
+
+    describe "SAD path" do
+      it "returns an error message when the email and password do not match any given instance of a single user" do
+
+      end
+    end
+  end
+
   describe "PATCH single users" do
     describe "HAPPY path" do
       it "updates the attributes of the specified user" do
@@ -209,7 +244,7 @@ RSpec.describe "Users", type: :request do
           email: "FakeUser@gmail.com",
           password: "password"
         )
-        binding.pry
+
         expect(User.count).to eq(3)
         delete "/api/v1/users/#{test_user.id}"
 

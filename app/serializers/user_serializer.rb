@@ -3,7 +3,6 @@ class UserSerializer
   attributes :first_name,
              :last_name,
              :email,
-             :password,
              :sex,
              :weight_lbs,
              :height_ft,
