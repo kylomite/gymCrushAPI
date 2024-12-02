@@ -22,14 +22,14 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # def login
-  #   user = User.find_by(email: params[:email])
-  #   if user && user.authenticate(params[:password])
-  #     render json: UserSerializer.new(user), status: :ok
-  #   else
-  #     render json: { errors: ['Invalid email or password'] }, status: :unauthorized
-  #   end
-  # end
+  def login
+    user = User.find_by(email: login_params[:email])
+    if user && user.authenticate(login_params[:password])
+      render json: UserSerializer.new(user)
+    else
+      render json: { errors: ['Invalid email or password'] }, status: :unauthorized
+    end
+  end
 
   def update 
     user = User.find_by(id: params[:id].to_i)
@@ -52,5 +52,9 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.permit(:first_name, :last_name, :email, :password, :sex, :weight_lbs, :height_ft, :height_in, :age, :activity_level, :target_calories, :target_fats, :target_carbs, :target_protein)
+  end
+
+  def login_params
+    params.permit(:email, :password)
   end
 end
