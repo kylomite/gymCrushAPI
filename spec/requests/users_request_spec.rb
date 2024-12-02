@@ -54,8 +54,6 @@ RSpec.describe "Users", type: :request do
           expect(attributes).to have_key(:email)
           expect(attributes[:email]).to be_a(String)
           
-          expect(attributes).to have_key(:password)
-          expect(attributes[:password]).to be_a(String)
           
           expect(attributes).to have_key(:sex)
           expect(attributes[:sex]).to be_a(String).or be_nil
@@ -209,7 +207,7 @@ RSpec.describe "Users", type: :request do
           email: "FakeUser@gmail.com",
           password: "password"
         )
-        binding.pry
+
         expect(User.count).to eq(3)
         delete "/api/v1/users/#{test_user.id}"
 

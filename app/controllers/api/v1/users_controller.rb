@@ -22,6 +22,15 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # def login
+  #   user = User.find_by(email: params[:email])
+  #   if user && user.authenticate(params[:password])
+  #     render json: UserSerializer.new(user), status: :ok
+  #   else
+  #     render json: { errors: ['Invalid email or password'] }, status: :unauthorized
+  #   end
+  # end
+
   def update 
     user = User.find_by(id: params[:id].to_i)
     if user.nil?
